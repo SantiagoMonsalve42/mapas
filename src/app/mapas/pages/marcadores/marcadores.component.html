@@ -1,3 +1,18 @@
+<ul class="list-group">
+    <li class="list-group-item list-group-item-primary"
+        (click)="addMarket()">
+        + Agregar
+    </li>
+    <li class="list-group-item"
+        *ngFor="let marker of listMarkers; let i= index"
+        (click)="goToMarket()"
+        [ngStyle]="{
+            'background-color': marker.color
+        }">
+        Marker {{i+1}}
+    </li>
+</ul>
+
 <div #mapaPointers class="mapa-container">
 
 </div>
