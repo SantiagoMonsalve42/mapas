@@ -6,6 +6,7 @@
     <li class="list-group-item"
         *ngFor="let marker of listMarkers; let i= index"
         (click)="goToMarket(marker.marker!)"
+        (dblclick)="delete(i)"
         [ngStyle]="{
             'background-color': marker.color
         }">

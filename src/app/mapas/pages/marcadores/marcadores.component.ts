@@ -81,6 +81,18 @@ export class MarcadoresComponent implements AfterViewInit {
       this.listMarkers.splice(0,0,{color,marker: newMarker});
     }
     this.guardarLocalStorage();
+    
+    newMarker.on('dragend',()=>{
+      this.guardarLocalStorage();
+    })
+  }
+
+  delete(index: number): void{
+    
+    this.listMarkers[index].marker?.remove();
+    this.listMarkers.splice(index,1);
+    this.guardarLocalStorage();
+
   }
 
   guardarLocalStorage(): void{
@@ -116,6 +128,9 @@ export class MarcadoresComponent implements AfterViewInit {
       this.listMarkers.push({
         marker: newMarker,
         color: m.color
+      });
+      newMarker.on('dragend',()=>{
+        this.guardarLocalStorage();
       })
     });
 
