@@ -3,7 +3,8 @@ import * as mapboxgl from 'mapbox-gl';
 
 interface marcadorColor{
   color: string,
-  marker: mapboxgl.Marker;
+  marker?: mapboxgl.Marker;
+  centro?: [number,number]
 }
 
 @Component({
@@ -49,13 +50,7 @@ export class MarcadoresComponent implements AfterViewInit {
       center: this.center,
       zoom: this.zoomLevel
     });
-
-    /*const marker= new mapboxgl.Marker()
-                      .setLngLat(this.center)
-                      .addTo(this.mapa);*/
-    
-
-    
+     this.leerLocalStorage();
   }
 
   randomizeColor(): string{
@@ -63,8 +58,12 @@ export class MarcadoresComponent implements AfterViewInit {
     return color;
   }
 
-  goToMarket(): void{
-
+  goToMarket(marker: mapboxgl.Marker): void{
+    this.mapa.flyTo({
+      center: marker!.getLngLat(),
+      essential: true // this animation is considered essential with respect to prefers-reduced-motion
+      });
+    this.guardarLocalStorage();
   }
 
   addMarket(): void{
@@ -81,6 +80,45 @@ export class MarcadoresComponent implements AfterViewInit {
       this.listMarkers.splice(7,1);
       this.listMarkers.splice(0,0,{color,marker: newMarker});
     }
-    
+    this.guardarLocalStorage();
   }
+
+  guardarLocalStorage(): void{
+    const lngLatArray: marcadorColor[]=[];
+
+    this.listMarkers.forEach(m =>{
+      const color = m.color;
+      const {lng, lat} = m.marker!.getLngLat();
+
+      lngLatArray.push({
+        color,
+        centro: [lng,lat]
+      });
+
+    });
+
+    localStorage.setItem("marcadores",JSON.stringify(lngLatArray));
+
+  }
+
+  leerLocalStorage():void{
+    if(!localStorage.getItem("marcadores")){
+      return;
+    }
+    const lngLatArray: marcadorColor[]= JSON.parse(localStorage.getItem("marcadores")!);
+    lngLatArray.forEach(m => {
+      const newMarker = new mapboxgl.Marker({
+        color: m.color,
+        draggable: true
+      })
+      .setLngLat(m.centro!)
+      .addTo(this.mapa);
+      this.listMarkers.push({
+        marker: newMarker,
+        color: m.color
+      })
+    });
+
+  }
+
 }

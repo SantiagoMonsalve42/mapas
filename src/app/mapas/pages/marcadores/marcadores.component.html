@@ -5,7 +5,7 @@
     </li>
     <li class="list-group-item"
         *ngFor="let marker of listMarkers; let i= index"
-        (click)="goToMarket()"
+        (click)="goToMarket(marker.marker!)"
         [ngStyle]="{
             'background-color': marker.color
         }">
