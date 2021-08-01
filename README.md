@@ -1,6 +1,6 @@
 # Mapas
 
-See the aplication working at: https://mapas-asms.netlify.app/maps/fullscreen
+See the aplication working at: https://mapas-asms.netlify.app
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.2.
 
 ## Development server
